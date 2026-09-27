@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DOOM PROTOCOL — GFG Student Chapter, Bennett University</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="DOOM PROTOCOL — a Marvel-inspired tech fest by the GeeksforGeeks Student Chapter, Bennett University. Answer the summons.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --bg:#0a1310;
+  --surface:#111f19;
+  --surface-2:#17291f;
+  --line: rgba(148,181,163,0.16);
+  --green-deep:#123324;
+  --green-mid:#2c6b4c;
+  --green-bright:#5fae7d;
+  --bronze:#c9a227;
+  --bronze-dim:#7a672a;
+  --text:#e9e6da;
+  --text-dim:#9fb3a7;
+  --radius: 2px;
+  --serif: 'Cinzel', serif;
+  --sans: 'Inter', system-ui, sans-serif;
+  box-sizing:border-box;
+  padding-top: env(safe-area-inset-top,0px);
+  padding-bottom: env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth; scroll-padding-top:calc(76px + env(safe-area-inset-top,0px));}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:var(--sans); line-height:1.6; overflow-x:hidden;
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(44,107,76,0.35), transparent 60%),
+    radial-gradient(ellipse 700px 600px at 100% 20%, rgba(201,162,39,0.08), transparent 55%);
+}
+img{max-width:100%}
+a{color:inherit}
+.wrap{max-width:1140px; margin:0 auto; padding:0 clamp(20px,5vw,48px);}
+h1,h2,h3{font-family:var(--serif); font-weight:700; letter-spacing:.02em; margin:0;}
+::selection{background:var(--bronze); color:#12180f}
+:focus-visible{outline:2px solid var(--bronze); outline-offset:3px;}
+@media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important; transition-duration:.001ms !important; scroll-behavior:auto !important;} }
+
+/* ---------- NAV ---------- */
+header{
+  position:sticky; top:0; z-index:50;
+  top: env(safe-area-inset-top,0px);
+  background:rgba(10,19,16,0.82); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+nav{display:flex; align-items:center; justify-content:space-between; padding:16px clamp(20px,5vw,48px); max-width:1140px; margin:0 auto;}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--serif); font-size:1.05rem; letter-spacing:.04em;}
+.brand .mark{width:26px; height:26px; flex:none;}
+.navlinks{display:flex; gap:clamp(16px,2vw,32px); list-style:none; margin:0; padding:0; font-size:.92rem;}
+.navlinks a{text-decoration:none; color:var(--text-dim); border-bottom:1px solid transparent; padding-bottom:2px; transition:color .2s, border-color .2s;}
+.navlinks a:hover{color:var(--green-bright); border-color:var(--green-bright);}
+.nav-cta{background:var(--bronze); color:#161307; font-weight:600; padding:9px 20px; text-decoration:none; font-size:.88rem; letter-spacing:.02em; border-radius:var(--radius);}
+.burger{display:none; background:none; border:1px solid var(--line); color:var(--text); width:40px; height:40px; border-radius:var(--radius); cursor:pointer; font-size:1.1rem;}
+.mobile-panel{display:none; flex-direction:column; gap:14px; padding:18px clamp(20px,5vw,48px) 24px; border-top:1px solid var(--line);}
+.mobile-panel a{text-decoration:none; color:var(--text-dim); font-size:.98rem;}
+@media (max-width:820px){
+  .navlinks, .nav-cta.desktop{display:none;}
+  .burger{display:block;}
+  header.open .mobile-panel{display:flex;}
+}
+
+/* ---------- HERO ---------- */
+.hero{
+  position:relative; min-height:calc(100svh - 1px); display:flex; align-items:center;
+  padding:110px clamp(20px,5vw,48px) 80px; overflow:hidden;
+  border-bottom:1px solid var(--line);
+}
+.hero-grid{
+  position:absolute; inset:0; z-index:0; opacity:.5;
+  background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 70% 60% at 70% 30%, black, transparent 75%);
+}
+.hero-glow{position:absolute; right:clamp(-8vw,-2vw,4vw); top:50%; transform:translateY(-50%); width:min(52vw,560px); aspect-ratio:3/4; z-index:0; pointer-events:none;}
+.hero-glow .beam{position:absolute; inset:0; background:radial-gradient(ellipse 60% 55% at 68% 38%, rgba(255,224,150,.22), rgba(95,174,125,.10) 45%, transparent 72%); filter:blur(2px); animation:pulseGlow 6s ease-in-out infinite;}
+@keyframes pulseGlow{0%,100%{opacity:.8} 50%{opacity:1}}
+.mask-glyph{position:relative; z-index:1; width:100%; height:100%; filter:drop-shadow(0 0 50px rgba(95,174,125,.3));}
+.hero-inner{position:relative; z-index:2; max-width:680px;}
+.kicker{font-size:.82rem; color:var(--bronze); letter-spacing:.14em; display:flex; align-items:center; gap:10px; margin-bottom:22px;}
+.kicker::before{content:""; width:26px; height:1px; background:var(--bronze);}
+.release-strip{display:inline-flex; align-items:center; gap:10px; font-family:var(--serif); font-size:.85rem; letter-spacing:.08em; color:var(--text-dim); margin-bottom:18px; border:1px solid var(--line); padding:6px 14px; border-radius:var(--radius);}
+.release-strip b{color:var(--green-bright); font-weight:700;}
+.hero h1{font-size:clamp(3rem,7.5vw,5.4rem); line-height:.96; color:var(--text); opacity:0; animation:heroRise 1s .15s ease forwards;}
+.hero h1 span{display:block; color:var(--green-bright);}
+@keyframes heroRise{from{opacity:0; transform:translateY(24px)} to{opacity:1; transform:none}}
+.hero p.lede{margin:26px 0 0; max-width:52ch; color:var(--text-dim); font-size:1.08rem; opacity:0; animation:heroRise 1s .35s ease forwards;}
+.hero-actions{display:flex; flex-wrap:wrap; gap:16px; margin-top:38px; align-items:center;}
+.btn{
+  display:inline-flex; align-items:center; gap:10px; padding:14px 28px; text-decoration:none;
+  font-family:var(--sans); font-weight:600; font-size:.95rem; border-radius:var(--radius);
+  border:1px solid transparent; cursor:pointer; transition:transform .18s ease, background .2s;
+}
+.btn-primary{background:var(--bronze); color:#161307;}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-ghost{border-color:var(--line); color:var(--text);}
+.btn-ghost:hover{border-color:var(--green-bright); color:var(--green-bright);}
+.countdown{display:flex; gap:22px; margin-top:52px;}
+.countdown div{text-align:left;}
+.countdown b{font-family:var(--serif); font-size:1.9rem; display:block; color:var(--text);}
+.countdown span{font-size:.72rem; color:var(--text-dim); letter-spacing:.08em;}
+
+/* ---------- SECTION shell ---------- */
+section{padding:clamp(64px,9vw,110px) 0; border-bottom:1px solid var(--line);}
+.section-head{max-width:640px; margin-bottom:54px;}
+.section-head .kicker{margin-bottom:16px;}
+.section-head h2{font-size:clamp(1.9rem,3.6vw,2.7rem); color:var(--text);}
+.section-head p{color:var(--text-dim); margin-top:16px; font-size:1.02rem; max-width:56ch;}
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+.reveal.in{opacity:1; transform:none;}
+
+/* ---------- DECREE / ABOUT ---------- */
+.decree{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;}
+.decree-quote{
+  font-family:var(--serif); font-size:clamp(1.3rem,2.4vw,1.7rem); line-height:1.5; color:var(--text);
+  border-left:2px solid var(--bronze); padding-left:26px;
+}
+.decree-quote cite{display:block; margin-top:18px; font-family:var(--sans); font-style:normal; font-size:.85rem; color:var(--text-dim); letter-spacing:.05em;}
+.decree-body p{color:var(--text-dim); font-size:1.02rem;}
+.decree-body p + p{margin-top:16px;}
+
+/* ---------- TRIALS (highlights) ---------- */
+.trials-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
+.trial{background:var(--surface); padding:34px 28px; position:relative;}
+.trial .num{font-family:var(--serif); color:var(--bronze-dim); font-size:.85rem; letter-spacing:.1em;}
+.trial h3{margin-top:14px; font-size:1.28rem; color:var(--text);}
+.trial p{margin-top:10px; color:var(--text-dim); font-size:.94rem;}
+.trial .tag{display:inline-block; margin-top:16px; font-size:.72rem; letter-spacing:.06em; color:var(--green-bright); border:1px solid rgba(95,174,125,.35); padding:4px 10px; border-radius:var(--radius);}
+
+/* ---------- SCHEDULE ---------- */
+.schedule{display:grid; gap:0;}
+.day-tabs{display:flex; gap:8px; margin-bottom:30px;}
+.day-tab{background:var(--surface); border:1px solid var(--line); color:var(--text-dim); padding:10px 22px; font-family:var(--sans); font-weight:600; cursor:pointer; border-radius:var(--radius); font-size:.9rem;}
+.day-tab[aria-selected="true"]{background:var(--green-deep); color:var(--green-bright); border-color:var(--green-mid);}
+.day-panel{display:none;}
+.day-panel.active{display:block;}
+.slot{display:grid; grid-template-columns:120px 1px 1fr; gap:24px; padding:22px 0; border-top:1px solid var(--line);}
+.slot:last-child{border-bottom:1px solid var(--line);}
+.slot time{font-family:var(--serif); color:var(--bronze); font-size:.95rem; padding-top:2px;}
+.slot .rule{background:var(--line);}
+.slot h4{font-size:1.05rem; color:var(--text); font-family:var(--sans); font-weight:600;}
+.slot p{margin:6px 0 0; color:var(--text-dim); font-size:.92rem;}
+
+/* ---------- WHY / STATS ---------- */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:36px;}
+.stat b{font-family:var(--serif); font-size:clamp(2rem,4vw,2.8rem); color:var(--green-bright); display:block;}
+.stat span{color:var(--text-dim); font-size:.88rem; letter-spacing:.03em;}
+
+/* ---------- REGISTER ---------- */
+.register-panel{
+  background:linear-gradient(160deg, var(--green-deep), var(--surface) 60%);
+  border:1px solid var(--green-mid); border-radius:var(--radius);
+  padding:clamp(36px,6vw,64px); display:grid; grid-template-columns:1.1fr .9fr; gap:48px; align-items:center;
+}
+.register-panel h2{font-size:clamp(1.8rem,3.4vw,2.4rem);}
+.register-panel p{color:var(--text-dim); margin-top:14px; max-width:48ch;}
+.form-card{background:var(--bg); border:1px solid var(--line); padding:28px; border-radius:var(--radius);}
+.form-card label{display:block; font-size:.78rem; letter-spacing:.05em; color:var(--text-dim); margin-bottom:6px;}
+.form-card input,.form-card select{
+  width:100%; background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+  padding:11px 12px; margin-bottom:16px; font-family:var(--sans); font-size:.94rem; border-radius:var(--radius);
+}
+.form-card input:focus,.form-card select:focus{border-color:var(--green-bright);}
+.form-card button{width:100%;}
+.form-note{font-size:.78rem; color:var(--text-dim); margin-top:12px;}
+
+/* ---------- FOOTER ---------- */
+footer{padding:44px 0 60px; border-bottom:none;}
+.foot-row{display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; align-items:center;}
+.foot-row .brand{font-size:.95rem;}
+.foot-links{display:flex; gap:22px; list-style:none; padding:0; margin:0; font-size:.85rem; color:var(--text-dim);}
+.foot-links a{text-decoration:none; color:var(--text-dim);}
+.foot-links a:hover{color:var(--green-bright);}
+.foot-copy{font-size:.78rem; color:var(--bronze-dim); margin-top:26px; letter-spacing:.02em;}
+
+@media (max-width:860px){
+  .decree{grid-template-columns:1fr;}
+  .register-panel{grid-template-columns:1fr;}
+  .mask-glyph{opacity:.35; width:60vw; right:-10vw;}
+}
+@media (max-width:560px){
+  .countdown{gap:14px}
+  .countdown b{font-size:1.4rem}
+  .slot{grid-template-columns:80px 1px 1fr; gap:16px;}
+}
+
+/* ---------- CINEMATIC BANNER ---------- */
+.cine-banner{position:relative; min-height:72vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; overflow:hidden; padding:0 20px 64px; background:linear-gradient(180deg,#050a08 0%, #0c1913 55%, #0a1310 100%);}
+.cine-arch{position:absolute; top:-8%; left:50%; transform:translateX(-50%); width:min(70vw,560px); height:62%; background:radial-gradient(ellipse 58% 68% at 50% 0%, rgba(244,227,174,.32), rgba(95,174,125,.12) 45%, transparent 75%); filter:blur(3px);}
+.cine-stairs{position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:min(560px,62%); height:42%; clip-path:polygon(34% 100%,66% 100%,100% 0%,0% 0%); background:repeating-linear-gradient(180deg, rgba(16,28,21,.95) 0 14px, rgba(7,13,10,.95) 14px 28px);}
+.cine-content{position:relative; z-index:2; text-align:center;}
+.cine-eyebrow{font-size:.8rem; letter-spacing:.22em; color:var(--bronze); margin:0 0 12px;}
+.cine-date{font-family:var(--serif); font-size:clamp(2.6rem,7vw,5rem); background:linear-gradient(180deg,#f4e3ae,#c9a227 55%,#7a672a); -webkit-background-clip:text; background-clip:text; color:transparent; letter-spacing:.03em; margin:0; line-height:1;}
+.cine-sub{font-family:var(--serif); font-size:clamp(1rem,2.2vw,1.35rem); color:var(--green-bright); letter-spacing:.4em; margin:8px 0 0;}
+.cine-tag{margin-top:18px; color:var(--text-dim); font-size:.95rem;}
+.cine-bots{position:relative; z-index:2; display:flex; align-items:flex-end; gap:clamp(18px,5vw,56px); margin-top:40px;}
+.cine-bots svg{width:clamp(30px,5vw,52px); height:auto; filter:drop-shadow(0 0 8px rgba(143,224,176,.25));}
+.cine-bots svg:nth-child(2n){opacity:.6; transform:scale(.82) translateY(6px);}
+.cine-bots svg:nth-child(3n){opacity:.4; transform:scale(.68) translateY(10px);}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <nav>
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="2" stroke="#c9a227" stroke-width="1.4"/>
+        <path d="M13 5L20 13L13 21L6 13L13 5Z" stroke="#5fae7d" stroke-width="1.4"/>
+      </svg>
+      DOOM&nbsp;PROTOCOL
+    </div>
+    <ul class="navlinks">
+      <li><a href="#decree">The Decree</a></li>
+      <li><a href="#trials">The Trials</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#register">Register</a></li>
+    </ul>
+    <a class="nav-cta desktop" href="#register">Answer the Summons</a>
+    <button class="burger" aria-label="Toggle menu" aria-expanded="false" id="burgerBtn">☰</button>
+  </nav>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="#decree">The Decree</a>
+    <a href="#trials">The Trials</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#register" class="nav-cta" style="text-align:center;">Answer the Summons</a>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true">
+    <div class="beam"></div>
+    <svg class="mask-glyph" viewBox="0 0 400 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="archClip"><path d="M200 10C120 10 40 55 40 55V400H360V55C360 55 280 10 200 10Z"/></clipPath>
+      </defs>
+      <g clip-path="url(#archClip)" opacity="0.9">
+        <rect x="0" y="0" width="400" height="520" fill="#0e1c15"/>
+        <g stroke="#2c6b4c" stroke-width="1.4" opacity="0.55">
+          <path d="M0 40H400 M0 90H400 M0 140H400 M0 190H400 M0 240H400 M0 290H400 M0 340H400"/>
+          <path d="M40 0V400 M90 0V400 M140 0V400 M200 0V400 M260 0V400 M310 0V400 M360 0V400"/>
+          <path d="M0 0L400 400 M400 0L0 400"/>
+        </g>
+        <path d="M200 130C150 130 115 175 112 235C110 275 118 300 105 325C232 380 168 380 295 325C282 300 290 275 288 235C285 175 250 130 200 130Z" fill="#060c09"/>
+        <path d="M200 130C150 130 115 175 112 235C110 275 118 300 105 325" stroke="#5fae7d" stroke-width="1.6" opacity="0.7"/>
+        <path d="M200 130C250 130 285 175 288 235C290 275 282 300 295 325" stroke="#5fae7d" stroke-width="1.6" opacity="0.7"/>
+        <path d="M255 205L288 235" stroke="#f4e3ae" stroke-width="3" opacity="0.85"/>
+        <circle cx="255" cy="205" r="6" fill="#f4e3ae" opacity="0.9"/>
+        <path d="M105 325C130 355 170 372 200 372C230 372 270 355 295 325" stroke="#2c6b4c" stroke-width="1.4" opacity="0.6"/>
+      </g>
+      <path d="M200 10C120 10 40 55 40 55V400H360V55C360 55 280 10 200 10Z" stroke="#c9a227" stroke-width="2.5" opacity="0.8"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="kicker">GFG STUDENT CHAPTER · BENNETT UNIVERSITY</div>
+    <div class="release-strip">AVENGERS: DOOMSDAY IN CINEMAS <b>12.18.26</b></div>
+    <h1>ALL WILL<span>KNEEL.</span></h1>
+    <p class="lede">Victor von Doom claims dominion on December 18, 2026 — the day <em>Avengers: Doomsday</em> hits theatres. Before that reign begins, Bennett University's coders, builders and misfits are summoned to a two-day court of trials — hacks, circuits and wit, judged by no one but the Iron Sovereign himself.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#register">Answer the Summons</a>
+      <a class="btn btn-ghost" href="#trials">View the Trials</a>
+    </div>
+    <div class="countdown" id="countdown" aria-label="Countdown to Doom Protocol">
+      <div><b id="cd-days">00</b><span>DAYS</span></div>
+      <div><b id="cd-hours">00</b><span>HOURS</span></div>
+      <div><b id="cd-min">00</b><span>MINUTES</span></div>
+      <div><b id="cd-sec">00</b><span>SECONDS</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="cine-banner">
+  <div class="cine-arch" aria-hidden="true"></div>
+  <div class="cine-stairs" aria-hidden="true"></div>
+  <div class="cine-content reveal">
+    <p class="cine-eyebrow">THE PROPHECY</p>
+    <h2 class="cine-date">12.18.26</h2>
+    <p class="cine-sub">IS DOOMSDAY</p>
+    <p class="cine-tag">Marvel Studios' <em>Avengers: Doomsday</em> arrives in cinemas — and Bennett's own court convenes before the throne is claimed.</p>
+  </div>
+  <div class="cine-bots" aria-hidden="true">
+    <svg viewBox="0 0 40 70" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C15 2 12 6 12 11C12 14 13 16 12 18C10 20 6 22 6 22C10 34 15 40 20 40C25 40 30 34 34 22C34 22 30 20 28 18C27 16 28 14 28 11C28 6 25 2 20 2Z" fill="#0e1c15" stroke="#3a5c48" stroke-width="1.2"/><circle cx="15" cy="16" r="2" fill="#8fe0b0"/><circle cx="25" cy="16" r="2" fill="#8fe0b0"/><path d="M8 40L4 68 M32 40L36 68 M20 40V68" stroke="#3a5c48" stroke-width="1.2"/></svg>
+    <svg viewBox="0 0 40 70" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C15 2 12 6 12 11C12 14 13 16 12 18C10 20 6 22 6 22C10 34 15 40 20 40C25 40 30 34 34 22C34 22 30 20 28 18C27 16 28 14 28 11C28 6 25 2 20 2Z" fill="#0e1c15" stroke="#3a5c48" stroke-width="1.2"/><circle cx="15" cy="16" r="2" fill="#8fe0b0"/><circle cx="25" cy="16" r="2" fill="#8fe0b0"/><path d="M8 40L4 68 M32 40L36 68 M20 40V68" stroke="#3a5c48" stroke-width="1.2"/></svg>
+    <svg viewBox="0 0 40 70" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C15 2 12 6 12 11C12 14 13 16 12 18C10 20 6 22 6 22C10 34 15 40 20 40C25 40 30 34 34 22C34 22 30 20 28 18C27 16 28 14 28 11C28 6 25 2 20 2Z" fill="#0e1c15" stroke="#c9a227" stroke-width="1.4"/><circle cx="15" cy="16" r="2.2" fill="#f4e3ae"/><circle cx="25" cy="16" r="2.2" fill="#f4e3ae"/><path d="M8 40L4 68 M32 40L36 68 M20 40V68" stroke="#c9a227" stroke-width="1.4"/></svg>
+    <svg viewBox="0 0 40 70" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C15 2 12 6 12 11C12 14 13 16 12 18C10 20 6 22 6 22C10 34 15 40 20 40C25 40 30 34 34 22C34 22 30 20 28 18C27 16 28 14 28 11C28 6 25 2 20 2Z" fill="#0e1c15" stroke="#3a5c48" stroke-width="1.2"/><circle cx="15" cy="16" r="2" fill="#8fe0b0"/><circle cx="25" cy="16" r="2" fill="#8fe0b0"/><path d="M8 40L4 68 M32 40L36 68 M20 40V68" stroke="#3a5c48" stroke-width="1.2"/></svg>
+    <svg viewBox="0 0 40 70" xmlns="http://www.w3.org/2000/svg"><path d="M20 2C15 2 12 6 12 11C12 14 13 16 12 18C10 20 6 22 6 22C10 34 15 40 20 40C25 40 30 34 34 22C34 22 30 20 28 18C27 16 28 14 28 11C28 6 25 2 20 2Z" fill="#0e1c15" stroke="#3a5c48" stroke-width="1.2"/><circle cx="15" cy="16" r="2" fill="#8fe0b0"/><circle cx="25" cy="16" r="2" fill="#8fe0b0"/><path d="M8 40L4 68 M32 40L36 68 M20 40V68" stroke="#3a5c48" stroke-width="1.2"/></svg>
+  </div>
+</section>
+
+<section id="decree">
+  <div class="wrap">
+    <div class="decree reveal">
+      <blockquote class="decree-quote">
+        "You call it tyranny. I call it order. Every empire before mine was built on chaos disguised as freedom — mine will be built on code, and it will not fail."
+        <cite>— issued from the throne of Latveria</cite>
+      </blockquote>
+      <div class="decree-body">
+        <p>Doom Protocol is Bennett University's tribute to Marvel's most dangerous mind — Victor von Doom: monarch, scientist, sorcerer, and the man about to become the MCU's greatest threat this December in <em>Avengers: Doomsday</em>.</p>
+        <p>Hosted by the GeeksforGeeks Student Chapter, this is not a hackathon dressed in a costume. It's a two-day court where builders, hackers and problem-solvers compete for a place among the Sovereign's chosen — through code, logic, and a little bit of showmanship.</p>
+        <p>No capes required. A working prototype and a strong argument will do.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">THE TRIALS</div>
+      <h2>Four paths into the court</h2>
+      <p>Pick your trial when you register — each runs its own judging, its own rewards, and its own chance to catch the Sovereign's eye.</p>
+    </div>
+    <div class="trials-grid">
+      <div class="trial">
+        <div class="num">TRIAL I</div>
+        <h3>Circuits of Iron</h3>
+        <p>A 24-hour build sprint. Ship a working product from problem statements inspired by Latverian "governance tech" — real-world, slightly villainous framing included.</p>
+        <span class="tag">Team hackathon</span>
+      </div>
+      <div class="trial">
+        <div class="num">TRIAL II</div>
+        <h3>Trial of Wit</h3>
+        <p>Timed competitive programming rounds. Three levels of difficulty, one leaderboard, zero mercy from the judges.</p>
+        <span class="tag">Solo · DSA</span>
+      </div>
+      <div class="trial">
+        <div class="num">TRIAL III</div>
+        <h3>Court of Illusion</h3>
+        <p>Workshops and talks on AI, systems design and security — taught by engineers who, frankly, explain things better than any sorcerer.</p>
+        <span class="tag">Talks & workshops</span>
+      </div>
+      <div class="trial">
+        <div class="num">TRIAL IV</div>
+        <h3>Masks & Machines</h3>
+        <p>Fan art, cosplay and a Marvel-lore quiz for anyone who'd rather build a legend than a login page.</p>
+        <span class="tag">Open · Casual</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="schedule">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">THE DECREE OF DAYS</div>
+      <h2>Two days at court</h2>
+      <p>Times are indicative and will be confirmed closer to the date.</p>
+    </div>
+    <div class="day-tabs" role="tablist" aria-label="Event days">
+      <button class="day-tab" role="tab" aria-selected="true" aria-controls="day1" id="tab1">Day I</button>
+      <button class="day-tab" role="tab" aria-selected="false" aria-controls="day2" id="tab2">Day II</button>
+    </div>
+    <div class="schedule">
+      <div class="day-panel active" id="day1" role="tabpanel" aria-labelledby="tab1">
+        <div class="slot"><time>09:00</time><div class="rule"></div><div><h4>Gates open · Registration</h4><p>Check-in, kits, and the reading of the Decree.</p></div></div>
+        <div class="slot"><time>10:00</time><div class="rule"></div><div><h4>Opening address & problem statements</h4><p>Circuits of Iron begins. 24-hour clock starts now.</p></div></div>
+        <div class="slot"><time>14:00</time><div class="rule"></div><div><h4>Trial of Wit — Round 1</h4><p>First competitive programming round.</p></div></div>
+        <div class="slot"><time>18:00</time><div class="rule"></div><div><h4>Court of Illusion — Workshop</h4><p>Evening technical session + mentor rounds.</p></div></div>
+        <div class="slot"><time>23:00</time><div class="rule"></div><div><h4>Midnight snacks & mentor floor</h4><p>Teams keep building through the night.</p></div></div>
+      </div>
+      <div class="day-panel" id="day2" role="tabpanel" aria-labelledby="tab2">
+        <div class="slot"><time>08:00</time><div class="rule"></div><div><h4>Hacking ends · Submissions lock</h4><p>Circuits of Iron code freeze.</p></div></div>
+        <div class="slot"><time>10:00</time><div class="rule"></div><div><h4>Trial of Wit — Final round</h4><p>Leaderboard finalists face off live.</p></div></div>
+        <div class="slot"><time>12:00</time><div class="rule"></div><div><h4>Masks & Machines showcase</h4><p>Cosplay walk and fan-art exhibition.</p></div></div>
+        <div class="slot"><time>15:00</time><div class="rule"></div><div><h4>Finalist demos to the court</h4><p>Top teams present to the judging panel.</p></div></div>
+        <div class="slot"><time>17:30</time><div class="rule"></div><div><h4>Closing ceremony & the Sovereign's Choice</h4><p>Winners announced across all trials.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">WHY KNEEL</div>
+      <h2>The court, in numbers</h2>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>₹1,50,000+</b><span>IN PRIZES ACROSS TRIALS</span></div>
+      <div class="stat"><b>24</b><span>HOURS OF UNBROKEN BUILDING</span></div>
+      <div class="stat"><b>4</b><span>TRIALS TO ENTER</span></div>
+      <div class="stat"><b>500+</b><span>CODERS EXPECTED AT COURT</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="register" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="register-panel reveal">
+      <div>
+        <div class="kicker">LAST CALL</div>
+        <h2>The Sovereign is expecting you.</h2>
+        <p>Registration closes the moment the court is full. Solo entries welcome for Trial II and III; teams of up to 4 for Circuits of Iron.</p>
+        <div style="margin-top:28px;"><a class="btn btn-ghost" href="#home">Back to the top ↑</a></div>
+      </div>
+      <form class="form-card" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Summons received.';">
+        <label for="name">Full name</label>
+        <input id="name" type="text" placeholder="Victor von Doom" required>
+        <label for="email">Bennett email</label>
+        <input id="email" type="email" placeholder="you@bennett.edu.in" required>
+        <label for="trial">Choose your trial</label>
+        <select id="trial">
+          <option>Circuits of Iron — Hackathon</option>
+          <option>Trial of Wit — Competitive Programming</option>
+          <option>Court of Illusion — Workshops</option>
+          <option>Masks & Machines — Cosplay / Fan Art</option>
+        </select>
+        <button class="btn btn-primary" type="submit">Submit to the Court</button>
+        <p class="form-note">This form is a placeholder — organizers can connect it to Google Forms or a live endpoint before launch.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <div class="brand">DOOM&nbsp;PROTOCOL</div>
+      <ul class="foot-links">
+        <li><a href="#decree">The Decree</a></li>
+        <li><a href="#trials">Trials</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#register">Register</a></li>
+      </ul>
+    </div>
+    <div class="foot-copy">Organized by the GeeksforGeeks Student Chapter, Bennett University. Doctor Doom and all related characters are trademarks of Marvel. This is an unofficial student fan event, not affiliated with or endorsed by Marvel or Disney.</div>
+  </div>
+</footer>
+
+<script>
+// mobile nav
+const burger = document.getElementById('burgerBtn');
+const header = document.getElementById('site-header');
+burger.addEventListener('click', () => {
+  const open = header.classList.toggle('open');
+  burger.setAttribute('aria-expanded', open ? 'true':'false');
+});
+document.querySelectorAll('.mobile-panel a').forEach(a=>a.addEventListener('click',()=>{header.classList.remove('open');burger.setAttribute('aria-expanded','false');}));
+
+// day tabs
+const tab1 = document.getElementById('tab1'), tab2 = document.getElementById('tab2');
+const day1 = document.getElementById('day1'), day2 = document.getElementById('day2');
+function showDay(which){
+  const d1 = which===1; 
+  tab1.setAttribute('aria-selected', d1); tab2.setAttribute('aria-selected', !d1);
+  day1.classList.toggle('active', d1); day2.classList.toggle('active', !d1);
+}
+tab1.addEventListener('click',()=>showDay(1));
+tab2.addEventListener('click',()=>showDay(2));
+
+// countdown to event (placeholder date — organizers update)
+const target = new Date('2026-11-21T09:00:00+05:30').getTime();
+function tick(){
+  const now = Date.now();
+  let diff = Math.max(0, target - now);
+  const d = Math.floor(diff/86400000); diff -= d*86400000;
+  const h = Math.floor(diff/3600000); diff -= h*3600000;
+  const m = Math.floor(diff/60000); diff -= m*60000;
+  const s = Math.floor(diff/1000);
+  document.getElementById('cd-days').textContent = String(d).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-min').textContent = String(m).padStart(2,'0');
+  document.getElementById('cd-sec').textContent = String(s).padStart(2,'0');
+}
+tick(); setInterval(tick,1000);
+
+// scroll reveal (one pass, section headers / key blocks only)
+try{
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.2});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+}catch(e){ document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in')); }
+</script>
+</body>
+</html>
